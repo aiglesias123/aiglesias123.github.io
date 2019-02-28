@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Zombie Hunter</title>
+    <link href='css/style.css' rel='stylesheet' type='text/css'/>
+</head>
+<body>
+    <p id='score'>Score: 0</p>
+    <div id='wrapper'>
+    <button id='startgame'>Start</button>
+    <button id='stopgame'>Restart</button>
+    </div>
+    <script>
+        let zomIdList = []
+        let zomCounter = 1;
+        let score = 0;
+        let zomSound = new Audio('src/SPLAT2.mp3');
+
+        function makeNewZombie(){
+            let newZom = document.createElement('img');
+            newZom.src = 'images/zombie.png';
+            newZom.onclick = clickZombie(newZom);
+            newZom.id = zomCounter;
+            zomIdList.push(zomCounter);
+            zomCounter += 1;
+            newZom.style.position = 'absolute';
+            newZom.style.left = Math.random()*(window.innerWidth-190) + 'px';
+            newZom.style.top = Math.random()*(window.innerHeight-129) + 'px';
+            document.body.append(newZom);
+        }
+
+        function clickZombie(relevantZom) {
+            return function () {
+                relevantZom.src = 'images/explode.gif';
+                score += 1;
+                document.getElementById('score').innerHTML = 'Score: ' + score;
+                zomSound.play();
+            }
+        }
+
+        function moveAllZombies() {
+            for (let i = 0; i < zomIdList.length; i++) {
+                let relevantZom = document.getElementById(zomIdList[i]);
+                relevantZom.src = 'images/zombie.png';
+                relevantZom.style.left = Math.random()*(window.innerWidth-190) + 'px';
+                relevantZom.style.top = Math.random()*(window.innerHeight-129) + 'px';
+            }
+        }
+
+        function removeAllZombies() {
+            for (let i = 0; i < zomIdList.length; i++) {
+                document.getElementById(zomIdList[i]).remove();
+            }
+            zomIdList = [];
+        }
+
+        function beginGame() {
+            document.getElementById('score').style.display = 'block';
+            document.getElementById('stopgame').style.display = 'block';
+            document.getElementById('startgame').style.display = 'none';
+            makeNewZombie();
+            newZomCounter = setInterval('makeNewZombie()', 9000);
+            moveZomCounter = setInterval('moveAllZombies()', 2000);
+            score = 0;
+        }
+
+        function endGame() {
+            document.getElementById('score').style.display = 'none';
+            document.getElementById('stopgame').style.display = 'none';
+            document.getElementById('startgame').style.display = 'block';
+            clearInterval(moveZomCounter);
+            clearInterval(newZomCounter);
+            removeAllZombies();
+        }
+
+        document.getElementById('startgame').onclick = beginGame;
+        document.getElementById('stopgame').onclick = endGame;
+    </script>
+</body>
+</html>
