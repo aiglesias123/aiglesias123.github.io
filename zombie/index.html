@@ -62,6 +62,7 @@
             newZomCounter = setInterval('makeNewZombie()', 9000);
             moveZomCounter = setInterval('moveAllZombies()', 2000);
             score = 0;
+            document.getElementById('score').innerHTML = 'Score: ' + score;
         }
 
         function endGame() {
