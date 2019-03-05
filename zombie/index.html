@@ -23,6 +23,7 @@
             newZom.id = zomCounter;
             zomIdList.push(zomCounter);
             zomCounter += 1;
+            newZom.dead = false;
             newZom.style.position = 'absolute';
             newZom.style.left = Math.random()*(window.innerWidth-190) + 'px';
             newZom.style.top = Math.random()*(window.innerHeight-129) + 'px';
@@ -31,10 +32,13 @@
 
         function clickZombie(relevantZom) {
             return function () {
-                relevantZom.src = 'images/explode.gif';
-                score += 1;
-                document.getElementById('score').innerHTML = 'Score: ' + score;
-                zomSound.play();
+                if (!relevantZom.dead) {
+                    relevantZom.src = 'images/explode.gif';
+                    score += 1;
+                    document.getElementById('score').innerHTML = 'Score: ' + score;
+                    zomSound.play();
+                    relevantZom.dead = true;
+                }
             }
         }
 
@@ -42,6 +46,7 @@
             for (let i = 0; i < zomIdList.length; i++) {
                 let relevantZom = document.getElementById(zomIdList[i]);
                 relevantZom.src = 'images/zombie.png';
+                relevantZom.dead = false;
                 relevantZom.style.left = Math.random()*(window.innerWidth-190) + 'px';
                 relevantZom.style.top = Math.random()*(window.innerHeight-129) + 'px';
             }
